@@ -9,6 +9,6 @@ Feature: Directions to Football Match
     Then the helper provides me with "<response>"
 
   Examples:
-    | type          | response                                             |
-    | knowledgeable | "Go straight and then turn left after two blocks."   |
-    | unsure        | "I'm not sure, please use GPS."                      |
+    | type          | response                                            |
+    | knowledgeable | Go straight and then turn left after two blocks.    |
+    | unsure        | I'm not sure, please use GPS.                       |
