@@ -20,4 +20,4 @@ def step_impl(context):
 
 @then('the helper provides me with "{response}"')
 def step_impl(context, response):
-    assert context.response == response
+    assert context.response == response, f"Expected '{response}', but got '{context.response}'"
