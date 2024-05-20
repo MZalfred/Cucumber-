@@ -1,10 +1,9 @@
-name: Python application test
+name: Python application test with Allure Reporting
 
 on: [push]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -13,9 +12,17 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: '3.8'
+
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install behave selenium
-    - name: Run Behave
-      run: behave
+        pip install behave selenium allure-behave
+
+    - name: Run Behave with Allure
+      run: behave -f allure_behave.formatter:AllureFormatter -o allure-results
+
+    - name: Publish Allure results
+      uses: simple-elf/allure-report-action@v1.0
+      with:
+        allure_results: allure-results
+        gh_pages: true
