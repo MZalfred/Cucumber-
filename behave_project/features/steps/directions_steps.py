@@ -1,23 +1,23 @@
-from behave import given, when, then
+from behave import given, when, then # type: ignore
 
 class Helper:
-    def __init__(self, location):
-        self.location = location
+    def __init__(self, type):
+        self.type = type
 
     def give_directions(self):
-        if self.location == "subway exit":
+        if self.type == "knowledgeable":
             return "Go straight and then turn left after two blocks."
         else:
             return "I'm not sure, please use GPS."
 
-@given('there is a helper on the street near the subway exit')
-def step_impl(context):
-    context.helper = Helper(location="subway exit")
+@given('there is a {type} helper on the street')
+def step_impl(context, type):
+    context.helper = Helper(type=type)
 
 @when('I ask for directions to the football match')
 def step_impl(context):
     context.response = context.helper.give_directions()
 
-@then('the helper provides me with the direction to the stadium')
-def step_impl(context):
-    assert context.response == "Go straight and then turn left after two blocks."
+@then('the helper provides me with "{response}"')
+def step_impl(context, response):
+    assert context.response == response
