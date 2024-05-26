@@ -1,15 +1,6 @@
 from behave import given, when, then # type: ignore
 
-class Helper:
-    def __init__(self, type):
-        self.type = type
-
-    def give_directions(self):
-        if self.type == "knowledgeable":
-            return "Go straight and then turn left after two blocks."
-        else:
-            return "I'm not sure, please use GPS."
-
+# Definitions for the scenario with two helpers offering directions
 @given('there are two helpers offering directions')
 def step_impl(context):
     # Simulating two helpers with different sets of directions
@@ -18,15 +9,28 @@ def step_impl(context):
         "helper2": "Take a right and then the first left."
     }
 
+@when('I ask both helpers for directions to the football match')
+def step_impl(context):
+    context.directions_received = {helper: info for helper, info in context.helpers.items()}
+
+@then('I should receive two different sets of directions')
+def step_impl(context):
+    assert len(set(context.directions_received.values())) == 2, "Directions should be different from each helper"
+
 @then('I choose the set of directions that seem more reliable')
 def step_impl(context):
     # Simulated logic to choose more reliable directions
     context.chosen_direction = context.helpers["helper1"]  # Assuming the first helper is more reliable
     assert context.chosen_direction == "Go straight and then turn left after two blocks."
 
+# Definitions for scenarios with a knowledgeable helper and limited knowledge helper
 @given('there is a knowledgeable helper on the street')
 def step_impl(context):
     context.helper = "Go straight and then turn left after two blocks."
+
+@given('there is a helper with limited knowledge on the street')
+def step_impl(context):
+    context.helper = "Nearby park is straight ahead."
 
 @when('I ask for directions to the football match')
 def step_impl(context):
@@ -36,18 +40,18 @@ def step_impl(context):
 def step_impl(context):
     assert context.received_directions == "Go straight and then turn left after two blocks."
 
-@given('there is a helper with limited knowledge on the street')
-def step_impl(context):
-    # Assuming limited knowledge directs to a nearby landmark
-    context.helper = "Nearby park is straight ahead."
-
 @then('the helper provides directions to the nearest landmark instead of the stadium')
 def step_impl(context):
     assert context.helper == "Nearby park is straight ahead."
 
+# Definitions for scenarios involving adverse weather conditions
 @given('a knowledgeable helper is available at the main intersection')
 def step_impl(context):
     context.helper = "Normally, go straight, but take the next left and follow detour signs due to rain."
+
+@given('heavy rainfall has led to the closure of several primary roads')
+def step_impl(context):
+    context.road_closure = True
 
 @when('I request directions to the nearest football stadium')
 def step_impl(context):
